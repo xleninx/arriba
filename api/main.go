@@ -1,6 +1,7 @@
 package main
 
 import (
+	"arriba/internal/app"
 	"arriba/internal/domain"
 	"arriba/internal/domain/constants"
 
@@ -37,5 +38,6 @@ func main() {
 
 	e := echo.New()
 
+	app.BuildRoutes(e, ctx)
 	e.Logger.Fatal(e.Start(":1323"))
 }
