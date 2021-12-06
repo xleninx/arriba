@@ -1,8 +1,10 @@
 package domain
 
-import "arriba/internal/domain/constants"
+import (
+	"arriba/internal/domain/constants"
+)
 
 type Account struct {
-	Balance   []Balance
-	Movements map[constants.AssetID][]Transaction
+	Balance   []Balance                           `json:"balance"`
+	Movements map[constants.AssetID][]Transaction `json:"-"`
 }

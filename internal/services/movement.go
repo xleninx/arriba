@@ -3,15 +3,28 @@ package services
 import (
 	"arriba/internal/domain"
 	"arriba/internal/domain/constants"
+	"errors"
 	"time"
 )
 
-func AddMovement(ctx domain.ArribaContext, userId int64, amount int64,
-	assetID constants.AssetID, transactionType constants.TransactionType) []domain.Balance {
-	account := ctx.Users[userId].Account
+func AddMovement(ctx *domain.ArribaContext, userId int64, amount int64,
+	assetID constants.AssetID, transactionType constants.TransactionType) ([]domain.Balance, error) {
+
+	if !assetID.IsValid() {
+		return nil, errors.New(string(constants.CurrencyInvalid))
+	}
+
+	user := GetUser(ctx, userId)
+	account := user.Account
 
 	switch transactionType {
 	case constants.Withdraw, constants.Sell, constants.Debit:
+		total := GetTotalAsset(user.Account, assetID)
+
+		if total < amount {
+			return nil, errors.New(string(constants.InsufficientFounds))
+		}
+
 		amount = -amount
 	}
 
@@ -28,13 +41,11 @@ func AddMovement(ctx domain.ArribaContext, userId int64, amount int64,
 	if account.Movements == nil {
 		account.Movements = make(map[constants.AssetID][]domain.Transaction)
 	}
+
 	account.Movements[assetID] = append(account.Movements[assetID], transaction)
 	account.Balance = CalculateBalance(account)
 
-	if a, ok := ctx.Users[userId]; ok {
-		a.Account = account
-		ctx.Users[userId] = a
-	}
+	UpdateUserAccount(ctx, userId, account)
 
-	return account.Balance
+	return account.Balance, nil
 }

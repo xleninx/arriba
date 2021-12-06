@@ -38,6 +38,6 @@ func main() {
 
 	e := echo.New()
 
-	app.BuildRoutes(e, ctx)
+	app.BuildRoutes(e, &ctx)
 	e.Logger.Fatal(e.Start(":1323"))
 }

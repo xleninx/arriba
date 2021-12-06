@@ -8,4 +8,5 @@ const (
 	Debit    TransactionType = "Debit"
 	Buy      TransactionType = "Buy"
 	Sell     TransactionType = "Sell"
+	Transfer TransactionType = "Transfer"
 )

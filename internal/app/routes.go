@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func BuildRoutes(e *echo.Echo, ctx domain.ArribaContext) {
+func BuildRoutes(e *echo.Echo, ctx *domain.ArribaContext) {
 	e.GET("/", func(c echo.Context) error {
 		return handlers.Balance(c, ctx)
 	})
@@ -17,11 +17,13 @@ func BuildRoutes(e *echo.Echo, ctx domain.ArribaContext) {
 	e.POST("/withdraw", func(c echo.Context) error {
 		return handlers.Withdraw(c, ctx)
 	})
-
 	e.POST("/buy", func(c echo.Context) error {
 		return handlers.Buy(c, ctx)
 	})
 	e.POST("/sell", func(c echo.Context) error {
 		return handlers.Sell(c, ctx)
+	})
+	e.POST("/transfer", func(c echo.Context) error {
+		return handlers.Transfer(c, ctx)
 	})
 }
