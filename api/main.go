@@ -4,6 +4,8 @@ import (
 	"arriba/internal/app"
 	"arriba/internal/domain"
 	"arriba/internal/domain/constants"
+	"fmt"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -39,5 +41,9 @@ func main() {
 	e := echo.New()
 
 	app.BuildRoutes(e, &ctx)
-	e.Logger.Fatal(e.Start(":1323"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", port)))
 }
