@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -39,6 +40,11 @@ func main() {
 	}
 
 	e := echo.New()
+	e.Use(app.IdempotentCheck(&ctx.Cache))
+
+	e.Use(middleware.BodyDump(func(c echo.Context, reqBody []byte, resBody []byte) {
+		app.SetIdempotentValue(c, &ctx, resBody)
+	}))
 
 	app.BuildRoutes(e, &ctx)
 	port := os.Getenv("PORT")

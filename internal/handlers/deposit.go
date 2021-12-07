@@ -21,5 +21,6 @@ func Deposit(c echo.Context, ctx *domain.ArribaContext) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
+
 	return c.JSON(200, balance)
 }
